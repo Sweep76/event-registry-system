@@ -9,7 +9,7 @@
 <body>
   <div class="container my-5">
     <h2>List of CLients</h2>
-    <a class="btn btn-primary" href="/test/event-registry-system/create.php" role="button">New Client</a>
+    <a class="btn btn-primary" href="/test/event-registry-system/crud/create.php" role="button">New Client</a>
     <br>
     <table class="table">
       <thead>
@@ -25,7 +25,8 @@
       </thead>
       <tbody>
         <?php 
-          include 'db_connection.php';
+          // Include database connection
+          require 'db_connection.php';
           // read all row from database table
           $sql = "SELECT * FROM clients";
           $result = $connection->query($sql);
@@ -45,8 +46,8 @@
                 <td>$row[address]</td>
                 <td>$row[created_at]</td>
                 <td>
-                  <a class= 'btn btn-primary btn-sm' href='/test/event-registry-system/edit.php?id=$row[id]'>Edit</a>
-                  <a class= 'btn btn-danger btn-sm' href='/test/event-registry-system/delete.php?id=$row[id]'>Delete</a>
+                  <a class= 'btn btn-primary btn-sm' href='/test/event-registry-system/crud/edit.php?id=$row[id]'>Edit</a>
+                  <a class= 'btn btn-danger btn-sm' href='/test/event-registry-system/crud/delete.php?id=$row[id]'>Delete</a>
                 </td>
               </tr>
             ";

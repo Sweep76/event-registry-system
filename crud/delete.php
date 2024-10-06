@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 
     if ($stmt->execute()) {
         // Redirect to index.php after successful deletion
-        header("location: /test/event-registry-system/index.php");
+        header("location: /test/event-registry-system/crud/index.php");
         exit;
     } else {
         echo "Error: " . $stmt->error;
@@ -22,7 +22,7 @@ if (isset($_GET['id'])) {
     $stmt->close();
 } else {
     // If no id is set, redirect back to index.php
-    header("location: /test/event-registry-system/index.php");
+    header("location: /test/event-registry-system/crud/index.php");
     exit;
 }
 

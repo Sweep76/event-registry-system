@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // GET method: Show the data of the client
 
     if(!isset($_GET['id'])) {
-        header("location: /test/event-registry-system/index.php");
+        header("location: /test/event-registry-system/crud/index.php");
         exit;
     }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $row = $results->fetch_assoc();
 
     if(!$row) {
-        header("location: /test/event-registry-system/index.php");
+        header("location: /test/event-registry-system/crud/index.php");
         exit;
     }
 
@@ -61,7 +61,7 @@ else {
 
         $successMessage = "Client updated successfully";
 
-        header("Location: /test/event-registry-system/index.php");
+        header("Location: /test/event-registry-system/crud/index.php");
         exit;
 
     } while (true);
@@ -142,7 +142,7 @@ else {
                 </div>
                     
                 <div class="col-sm-3 col-sm-3 d-grind">
-                    <a class="btn btn-outline-primary" href="/test/event-registry-system/index.php" role="button">Cancel</a>
+                    <a class="btn btn-outline-primary" href="/test/event-registry-system/crud/index.php" role="button">Cancel</a>
                 </div>
             </div>
             
