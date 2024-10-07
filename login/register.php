@@ -1,6 +1,12 @@
 <?php include "layout/header.php";
 // include "../tools/validator.php";
 
+// logged in users are redirected to the home page
+if (isset($_SESSION['email'])) {
+    header("Location: index.php");
+    exit;
+}
+
 $first_name = "";
 $last_name = "";
 $email = "";
