@@ -7,6 +7,59 @@ if (isset($_SESSION["email"])) {
     exit;
 }
 
+$email = "";
+$error = "";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    if (empty($email) || empty($password)){
+        $error = "Email and Password are required";
+    }
+    else {
+        include "tools/db.php";
+        $dbConnection = getDatabaseConnection();
+
+        $statement = $dbConnection->prepare(
+            "SELECT id, first_name, last_name, phone, password, created_at FROM users WHERE email = ?"
+        );
+
+        // Bind variables to the prepared statement as parameters
+        $statement->bind_param('s', $email);
+
+        //execute statement
+        $statement->execute();
+
+        // bind result variables
+        $statement->bind_result($id, $first_name, $last_name, $phone, $stored_password, $created_at);
+
+        //fetch values
+        if ($statement->fetch()) {
+            if(password_verify($password, $stored_password)) {
+                // Password is correct
+
+                // Store data in session variables
+                $_SESSION["id"] = $id;
+                $_SESSION["first_name"] = $first_name;
+                $_SESSION["last_name"] = $last_name;
+                $_SESSION["email"] = $email;
+                $_SESSION["phone"] = $phone;
+                $_SESSION["created_at"] = $created_at;
+
+                // Redirect user to the home page
+                header("location: index.php");
+                exit;
+            }
+        }
+
+
+        $statement->close();
+
+        $error = "Email or Password invalid";
+    }
+}
+
 ?>
 
 <div class="container py-5">
@@ -14,11 +67,18 @@ if (isset($_SESSION["email"])) {
         <h2 class="text-center mb-4">Login</h2>
         <hr />
 
+        <?php if (!empty($error)) { ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong><?= $error ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
+
         <!-- form action -->
         <form method="post">
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input class="form-control" name="email" value="" />
+                <input class="form-control" name="email" value="<?= $email ?>" />
             </div>
 
             <div class="mb-3">
