@@ -3,6 +3,9 @@
 session_start();
 
 $authenticated = false;
+if (isset($_SESSION['email'])) {
+    $authenticated = true;
+}
 ?>
 
 <!doctype html>
@@ -18,7 +21,7 @@ $authenticated = false;
 
   <body>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="index.php">
         <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
