@@ -69,9 +69,15 @@
                 </div>
 
                 <div class="row mb-3">
-                    
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a href="index.php" class="btn btn-outline-primary">
+                            Cancel
+                        </a>
+                    </div>
                 </div>
-
             </form>
         </div>
     </div>
