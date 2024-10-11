@@ -10,10 +10,29 @@ if(!isset($_SESSION["email"])){
 include "tools/db.php";
 $dbConnection = getDatabaseConnection();
 
-// Prepare the SQL statement to select products
-$statement = $dbConnection->prepare("SELECT id, name, description, price, quantity FROM products");
+// Set the number of results per page
+$results_per_page = 10;
+
+// Check if the page is set, otherwise default to page 1
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Calculate the offset for the query
+$offset = ($page - 1) * $results_per_page;
+
+// Prepare the SQL statement to select products with limit and offset
+$statement = $dbConnection->prepare("SELECT id, name, description, price, quantity FROM products LIMIT ? OFFSET ?");
+$statement->bind_param("ii", $results_per_page, $offset);
 $statement->execute();
 $result = $statement->get_result(); // Fetch the results
+
+// Get the total number of products for pagination
+$total_products_statement = $dbConnection->prepare("SELECT COUNT(id) AS total FROM products");
+$total_products_statement->execute();
+$total_products_result = $total_products_statement->get_result();
+$total_products = $total_products_result->fetch_assoc()['total'];
+
+// Calculate the total number of pages
+$total_pages = ceil($total_products / $results_per_page);
 ?>
 
 <!DOCTYPE html>
@@ -51,14 +70,29 @@ $result = $statement->get_result(); // Fetch the results
         tr:hover {
             background-color: #f1f1f1;
         }
-        .btn {
-            margin-top: 15px;
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .page-link {
+            margin: 0 5px;
+        }
+
+        /* CSS for smooth transition */
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-<div class="table-container">
+<div class="table-container fade-in">
     <h2 class="text-center mt-4">Product List</h2>
     <table class="table table-striped">
         <thead>
@@ -92,7 +126,31 @@ $result = $statement->get_result(); // Fetch the results
     </table>
 </div>
 
+<!-- Pagination -->
+<div class="pagination">
+    <?php if ($page > 1): ?>
+        <a class="btn btn-outline-primary page-link" href="product_list.php?page=<?php echo $page-1; ?>">Previous</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <a class="btn btn-primary page-link <?php if($i == $page) echo 'active'; ?>" href="product_list.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+    <?php endfor; ?>
+
+    <?php if ($page < $total_pages): ?>
+        <a class="btn btn-outline-primary page-link" href="product_list.php?page=<?php echo $page+1; ?>">Next</a>
+    <?php endif; ?>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript to trigger the fade-in animation after page load -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tableContainer = document.querySelector('.table-container');
+        tableContainer.classList.add('show');
+    });
+</script>
+
 </body>
 </html>
 
