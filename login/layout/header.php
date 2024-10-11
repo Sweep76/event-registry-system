@@ -41,6 +41,10 @@ if (isset($_SESSION['email'])) {
           </li>
           <li class="nav-item">
               <a class="nav-link text-dark" href="orders.php">Cart</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link text-dark" href="about_us.php">About us</a>
+          </li>
         </ul>
 
           
