@@ -51,7 +51,7 @@ $result = $statement->get_result();
 </head>
 <body>
 
-<h2>Your Orders</h2>
+<h2>Orders for</h2>
 
 <table>
     <thead>
