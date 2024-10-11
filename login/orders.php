@@ -15,7 +15,7 @@ $userId = $_SESSION['id']; // Ensure user ID is stored in session on login
 
 // Prepare the SQL statement to get the user's orders
 $statement = $dbConnection->prepare(
-    "SELECT p.name AS product_name, o.order_date, o.order_status
+    "SELECT p.name AS product_name, p.price, o.order_quantity, (p.price * o.order_quantity), o.order_date, o.order_status  
     FROM orders o
     JOIN products p ON o.product_id = p.id
     WHERE o.customer_id = ?"
@@ -51,12 +51,15 @@ $result = $statement->get_result();
 </head>
 <body>
 
-<h2>Orders for</h2>
+<h2>Your Orders</h2>
 
 <table>
     <thead>
         <tr>
             <th>Product Name</th>
+            <th>Price</th>
+            <th>Order Quantity</th>
+            <th>Total Price</th>
             <th>Order Date</th>
             <th>Status</th>
         </tr>
@@ -69,6 +72,9 @@ $result = $statement->get_result();
             while($row = $result->fetch_assoc()) {
                 echo "<tr>
                         <td>" . htmlspecialchars($row["product_name"]) . "</td>
+                        <td>" . htmlspecialchars($row["price"]) . "</td>
+                        <td>" . htmlspecialchars($row["order_quantity"]) . "</td>
+                        <td>" . htmlspecialchars($row["(p.price * o.order_quantity)"]) . "</td>
                         <td>" . htmlspecialchars($row["order_date"]) . "</td>
                         <td>" . htmlspecialchars($row["order_status"]) . "</td>
                       </tr>";
