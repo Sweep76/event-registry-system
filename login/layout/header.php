@@ -32,9 +32,15 @@ if (isset($_SESSION['email'])) {
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link text-dark" href="index.php">Home</a>
+              <a class="nav-link text-dark" href="index.php">Home</a>
           </li>
+          <li class="nav-item">
+              <a class="nav-link text-dark" href="product_list.php">Product List</a>
+          </li>
+        </ul>
+
           
         </ul>
         <?php
@@ -50,7 +56,6 @@ if (isset($_SESSION['email'])) {
                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                <li><a class="dropdown-item" href="product_list.php">Product List</a></li>
               </ul>
           </li>
         </ul>
