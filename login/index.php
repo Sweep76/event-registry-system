@@ -1,10 +1,12 @@
-<?php include "layout/header.php"; 
+<?php 
+include "layout/header.php"; 
+
 ?>
 
 
   <div style="background-color: #08618d;">
   <div class="container text-white py-5">
-    <div class="row align-items-center">
+    <di class="row align-items-center">
       <div class="col-md-6">
         <h1 class="mb-5 display-2"><strong>Best Shop of Electronics</strong></h1>
         <p>
