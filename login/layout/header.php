@@ -50,6 +50,7 @@ if (isset($_SESSION['email'])) {
                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                <li><a class="dropdown-item" href="product_list.php">Product List</a></li>
               </ul>
           </li>
         </ul>
