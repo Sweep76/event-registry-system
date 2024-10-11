@@ -14,7 +14,7 @@ if (isset($_SESSION['email'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Best Store</title>
-    <link rel="icon" href="images/logo.png">
+    <link rel="icon" href="images/globe.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   </head>
 
@@ -24,8 +24,8 @@ if (isset($_SESSION['email'])) {
     <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="index.php">
-        <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        Best Store
+        <img src="images/globe.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Supplies Store
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($email) || empty($password)){
         $error = "Email and Password are required";
     }
-    else {
+    else {  
         include "tools/db.php";
         $dbConnection = getDatabaseConnection();
 
