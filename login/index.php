@@ -10,7 +10,7 @@ include "layout/header.php";
       <div class="col-md-6">
         <h1 class="mb-5 display-2"><strong>WHIRL BUSINESS ENTERPRISES</strong></h1>
         <p>
-          Find a large selection of newest electronic devices from most popular brands and with affordable prices.
+          Find a large selection of office supplies from most popular brands and with affordable prices.
         </p>
       </div>
       <div class="col-md-6">
