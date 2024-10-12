@@ -13,12 +13,19 @@ $dbConnection = getDatabaseConnection();
 // Fetch the user ID from the session
 $userId = $_SESSION['id']; // Ensure user ID is stored in session on login
 
-// Prepare the SQL statement to get the user's orders
+// Pagination logic
+$limit = 5; // Number of orders per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
+$offset = ($page - 1) * $limit; // Calculate offset for SQL query
+
+// Prepare the SQL statement to get the user's orders with limit and offset
 $statement = $dbConnection->prepare(
-    "SELECT o.order_id AS order_id, p.name AS product_name, p.price, o.order_quantity, (p.price * o.order_quantity) AS total_price, o.order_date, o.order_status  
+    "SELECT o.order_id AS order_id, p.name AS product_name, p.price, o.order_quantity, 
+    (p.price * o.order_quantity) AS total_price, o.order_date, o.order_status  
     FROM orders o
     JOIN products p ON o.product_id = p.id
-    WHERE o.customer_id = ?;"
+    WHERE o.customer_id = ? 
+    LIMIT ? OFFSET ?;"
 );
 
 // Check if the statement preparation was successful
@@ -26,10 +33,21 @@ if (!$statement) {
     die("Preparation failed: " . $dbConnection->error);
 }
 
-// Bind the user ID to the query
-$statement->bind_param("i", $userId);
+// Bind the user ID, limit, and offset to the query
+$statement->bind_param("iii", $userId, $limit, $offset);
 $statement->execute();
 $result = $statement->get_result();
+
+// Fetch total number of orders to calculate total pages
+$totalOrdersStmt = $dbConnection->prepare(
+    "SELECT COUNT(*) AS total_orders FROM orders WHERE customer_id = ?;"
+);
+$totalOrdersStmt->bind_param("i", $userId);
+$totalOrdersStmt->execute();
+$totalOrdersResult = $totalOrdersStmt->get_result();
+$totalOrders = $totalOrdersResult->fetch_assoc()['total_orders'];
+
+$totalPages = ceil($totalOrders / $limit); // Calculate total pages
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +71,7 @@ $result = $statement->get_result();
         // Check if the query returned any results
         if ($result->num_rows > 0) {
             // Output data of each row
-            $counter = 0;
+            $counter = $offset;
             while ($row = $result->fetch_assoc()) {
                 $counter++;
                 
@@ -83,6 +101,10 @@ $result = $statement->get_result();
                             <strong>Order Date:</strong> " . htmlspecialchars($row["order_date"]) . "<br>
                             <strong>Status:</strong> " . htmlspecialchars($row["order_status"]) . "<br>
                             <a href='edit_order.php?id=" . htmlspecialchars($row["order_id"]) . "' class='btn btn-primary mt-2'>Edit</a>
+                            <form action='delete_order.php' method='POST' style='display:inline-block;'>
+                                <input type='hidden' name='order_id' value='" . htmlspecialchars($row["order_id"]) . "'>
+                                <button type='submit' class='btn btn-danger mt-2' onclick='return confirm(\"Are you sure you want to delete this order?\")'>Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>";
@@ -93,6 +115,32 @@ $result = $statement->get_result();
         ?>
     </div>
 
+    <!-- Pagination Links -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <?php if ($page > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+            
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

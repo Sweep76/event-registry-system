@@ -102,6 +102,7 @@ $total_pages = ceil($total_products / $results_per_page);
                 <th>Description</th>
                 <th>Price</th>
                 <th>Quantity</th>
+                <th>Action</th> <!-- Added Action column -->
             </tr>
         </thead>
         <tbody>
@@ -116,10 +117,17 @@ $total_pages = ceil($total_products / $results_per_page);
                             <td>" . htmlspecialchars($row["description"]) . "</td>
                             <td>$" . number_format(htmlspecialchars($row["price"]), 2) . "</td>
                             <td>" . htmlspecialchars($row["quantity"]) . "</td>
-                          </tr>";
+                            <td>
+                                <form action='purchase.php' method='POST'>
+                                    <input type='hidden' name='product_id' value='" . htmlspecialchars($row["id"]) . "'>
+                                    <input type='number' name='order_quantity' min='1' max='" . htmlspecialchars($row["quantity"]) . "' required>
+                                    <button type='submit' class='btn btn-primary'>Buy</button>
+                                </form>
+                            </td>
+                        </tr>";
                 }
             } else {
-                echo "<tr><td colspan='5' class='text-center'>No products found</td></tr>";
+                echo "<tr><td colspan='6' class='text-center'>No products found</td></tr>";
             }
             ?>
         </tbody>
